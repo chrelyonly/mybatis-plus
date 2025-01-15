@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2024, baomidou (jobob@qq.com).
+ * Copyright (c) 2011-2025, baomidou (jobob@qq.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,7 +52,8 @@ public class DialectFactory {
             // other types
             else if (dbType == DbType.ORACLE_12C
                 || dbType == DbType.FIREBIRD
-                || dbType == DbType.SQL_SERVER) {
+                || dbType == DbType.SQL_SERVER
+                || dbType == DbType.DERBY) {
                 dialect = new Oracle12cDialect();
             } else if (dbType == DbType.DB2) {
                 dialect = new DB2Dialect();

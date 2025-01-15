@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2024, baomidou (jobob@qq.com).
+ * Copyright (c) 2011-2025, baomidou (jobob@qq.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -85,57 +85,24 @@ public class LambdaUpdateWrapper<T> extends AbstractLambdaWrapper<T, LambdaUpdat
 
     @Override
     public LambdaUpdateWrapper<T> setSql(boolean condition, String setSql, Object... params) {
-        if (condition && StringUtils.isNotBlank(setSql)) {
+        return maybeDo(condition && StringUtils.isNotBlank(setSql), () -> {
             sqlSet.add(formatSqlMaybeWithParam(setSql, params));
-        }
-        return typedThis;
-    }
-
-    /**
-     * 字段自增变量 val 值
-     *
-     * @param column 字段
-     * @param val    变量值 1 字段自增 + 1
-     */
-    public LambdaUpdateWrapper<T> setIncrBy(SFunction<T, ?> column, Number val) {
-        return setIncrBy(true, column, val);
-    }
-
-    /**
-     * 字段自增变量 val 值
-     *
-     * @param condition 是否加入 set
-     * @param column    字段
-     * @param val       变量值 1 字段自增 + 1
-     */
-    public LambdaUpdateWrapper<T> setIncrBy(boolean condition, SFunction<T, ?> column, Number val) {
-        return maybeDo(condition, () -> {
-            String realColumn = columnToString(column);
-            sqlSet.add(realColumn + Constants.EQUALS + realColumn + Constants.PLUS + (val instanceof BigDecimal ? ((BigDecimal) val).toPlainString() : val));
         });
     }
 
-    /**
-     * 字段自减变量 val 值
-     *
-     * @param column 字段
-     * @param val    变量值 1 字段自减 - 1
-     */
-    public LambdaUpdateWrapper<T> setDecrBy(SFunction<T, ?> column, Number val) {
-        return setDecrBy(true, column, val);
+    @Override
+    public LambdaUpdateWrapper<T> setIncrBy(boolean condition, SFunction<T, ?> column, Number val) {
+        return maybeDo(condition, () -> {
+            String realColumn = columnToString(column);
+            sqlSet.add(String.format("%s=%s + %s", realColumn, realColumn, val instanceof BigDecimal ? ((BigDecimal) val).toPlainString() : val));
+        });
     }
 
-    /**
-     * 字段自减变量 val 值
-     *
-     * @param condition 是否加入 set
-     * @param column    字段
-     * @param val       变量值 1 字段自减 - 1
-     */
+    @Override
     public LambdaUpdateWrapper<T> setDecrBy(boolean condition, SFunction<T, ?> column, Number val) {
         return maybeDo(condition, () -> {
             String realColumn = columnToString(column);
-            sqlSet.add(realColumn + Constants.EQUALS + realColumn + Constants.DASH + (val instanceof BigDecimal ? ((BigDecimal) val).toPlainString() : val));
+            sqlSet.add(String.format("%s=%s - %s", realColumn, realColumn, val instanceof BigDecimal ? ((BigDecimal) val).toPlainString() : val));
         });
     }
 

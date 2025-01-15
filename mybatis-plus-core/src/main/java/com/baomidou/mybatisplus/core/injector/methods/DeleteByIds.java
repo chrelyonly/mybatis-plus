@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2024, baomidou (jobob@qq.com).
+ * Copyright (c) 2011-2025, baomidou (jobob@qq.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -85,7 +85,7 @@ public class DeleteByIds extends AbstractMethod {
         String sqlSet = "SET ";
         if (CollectionUtils.isNotEmpty(fieldInfos)) {
             sqlSet += SqlScriptUtils.convertIf(fieldInfos.stream()
-                .map(i -> i.getSqlSet(Constants.ENTITY + StringPool.DOT)).collect(joining(EMPTY)), String.format("%s != null", Constants.ENTITY), true);
+                .map(i -> i.getSqlSet(Constants.MP_FILL_ET + StringPool.DOT)).collect(joining(EMPTY)), String.format("%s != null", Constants.MP_FILL_ET), true);
         }
         sqlSet += StringPool.EMPTY + tableInfo.getLogicDeleteSql(false, false);
         return String.format(sqlMethod.getSql(), tableInfo.getTableName(),

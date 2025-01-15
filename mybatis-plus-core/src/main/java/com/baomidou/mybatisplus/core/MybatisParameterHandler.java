@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2024, baomidou (jobob@qq.com).
+ * Copyright (c) 2011-2025, baomidou (jobob@qq.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import com.baomidou.mybatisplus.core.toolkit.ArrayUtils;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.baomidou.mybatisplus.core.toolkit.GlobalConfigUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlCommandType;
@@ -60,10 +61,12 @@ public class MybatisParameterHandler extends DefaultParameterHandler {
     private final Configuration configuration;
     private final SqlCommandType sqlCommandType;
     private final MappedStatement mappedStatement;
+    private final Log log;
 
     public MybatisParameterHandler(MappedStatement mappedStatement, Object parameter, BoundSql boundSql) {
         super(mappedStatement, parameter, boundSql);
         this.mappedStatement = mappedStatement;
+        this.log = mappedStatement.getStatementLog();
         this.configuration = mappedStatement.getConfiguration();
         this.sqlCommandType = mappedStatement.getSqlCommandType();
         processParameter(parameter);
@@ -85,12 +88,16 @@ public class MybatisParameterHandler extends DefaultParameterHandler {
             if (parameter instanceof Map) {
                 // 处理单参数使用注解标记的时候，尝试提取et来获取实体参数
                 Map<?, ?> map = (Map<?, ?>) parameter;
-                if (map.containsKey(Constants.ENTITY)) {
-                    Object et = map.get(Constants.ENTITY);
-                    if (et != null) {
-                        entity = et;
-                        tableInfo = TableInfoHelper.getTableInfo(entity.getClass());
-                    }
+                Object et = null;
+                if(map.containsKey(Constants.ENTITY)){
+                    et = map.get(Constants.ENTITY);
+
+                } else if(map.containsKey(Constants.MP_FILL_ET)){
+                    et = map.get(Constants.MP_FILL_ET);
+                }
+                if (et != null) {
+                    entity = et;
+                    tableInfo = TableInfoHelper.getTableInfo(entity.getClass());
                 }
             } else {
                 tableInfo = TableInfoHelper.getTableInfo(parameter.getClass());
@@ -119,7 +126,11 @@ public class MybatisParameterHandler extends DefaultParameterHandler {
                     Number id = identifierGenerator.nextId(entity);
                     metaObject.setValue(keyProperty, OgnlOps.convertValue(id, tableInfo.getKeyType()));
                 } else if (idType.getKey() == IdType.ASSIGN_UUID.getKey()) {
-                    metaObject.setValue(keyProperty, identifierGenerator.nextUUID(entity));
+                    if(String.class.equals(tableInfo.getKeyType())) {
+                        metaObject.setValue(keyProperty, identifierGenerator.nextUUID(entity));
+                    } else {
+                        log.warn("The current ID generation strategy does not support: " + tableInfo.getKeyType());
+                    }
                 }
             }
         }

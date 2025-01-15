@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2024, baomidou (jobob@qq.com).
+ * Copyright (c) 2011-2025, baomidou (jobob@qq.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,23 +66,31 @@ public class PageDTO<T> extends Page<T> {
     }
 
     public String getCountId() {
-        return this.countId;
+        return super.countId();
     }
 
     public Long getMaxLimit() {
-        return this.maxLimit;
+        return super.maxLimit();
     }
 
     public List<OrderItem> getOrders() {
-        return this.orders;
+        return super.orders();
     }
 
     public boolean isOptimizeCountSql() {
-        return this.optimizeCountSql;
+        return super.optimizeCountSql();
     }
 
     public boolean isSearchCount() {
-        return this.searchCount;
+        return super.searchCount();
     }
 
+    public boolean isOptimizeJoinOfCountSql() {
+        return super.optimizeJoinOfCountSql();
+    }
+
+    @Override
+    public String toString() {
+        return "PageDTO{} " + super.toString();
+    }
 }
