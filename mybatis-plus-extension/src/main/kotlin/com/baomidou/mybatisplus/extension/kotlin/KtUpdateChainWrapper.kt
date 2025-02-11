@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2024, baomidou (jobob@qq.com).
+ * Copyright (c) 2011-2025, baomidou (jobob@qq.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,6 +55,16 @@ open class KtUpdateChainWrapper<T : Any>(
 
     override fun setSql(condition: Boolean, setSql: String, vararg params: Any): KtUpdateChainWrapper<T> {
         wrapperChildren.setSql(condition, setSql, *params)
+        return typedThis
+    }
+
+    override fun setDecrBy(condition: Boolean, column: KProperty1<in T, *>, `val`: Number): KtUpdateChainWrapper<T> {
+        wrapperChildren.setDecrBy(condition, column, `val`)
+        return typedThis
+    }
+
+    override fun setIncrBy(condition: Boolean, column: KProperty1<in T, *>, `val`: Number): KtUpdateChainWrapper<T> {
+        wrapperChildren.setIncrBy(condition, column, `val`)
         return typedThis
     }
 

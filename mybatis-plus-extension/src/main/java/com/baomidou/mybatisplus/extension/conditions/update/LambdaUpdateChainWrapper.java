@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2024, baomidou (jobob@qq.com).
+ * Copyright (c) 2011-2025, baomidou (jobob@qq.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,6 +44,12 @@ public class LambdaUpdateChainWrapper<T> extends AbstractChainWrapper<T, SFuncti
         super.wrapperChildren = new LambdaUpdateWrapper<>(entityClass);
     }
 
+    public LambdaUpdateChainWrapper(BaseMapper<T> baseMapper, LambdaUpdateWrapper<T> wrapperChildren) {
+        super();
+        this.baseMapper = baseMapper;
+        super.wrapperChildren = wrapperChildren;
+    }
+
     @Override
     public LambdaUpdateChainWrapper<T> set(boolean condition, SFunction<T, ?> column, Object val, String mapping) {
         wrapperChildren.set(condition, column, val, mapping);
@@ -56,19 +62,6 @@ public class LambdaUpdateChainWrapper<T> extends AbstractChainWrapper<T, SFuncti
         return typedThis;
     }
 
-    /**
-     * 字段自增变量 val 值
-     *
-     * @param column 字段
-     * @param val    值
-     * @return this
-     * @since 3.5.6
-     */
-    public LambdaUpdateChainWrapper<T> setIncrBy(SFunction<T, ?> column, Number val) {
-        wrapperChildren.setIncrBy(column, val);
-        return typedThis;
-    }
-
 
     /**
      * 字段自增变量 val 值
@@ -79,6 +72,7 @@ public class LambdaUpdateChainWrapper<T> extends AbstractChainWrapper<T, SFuncti
      * @return this
      * @since 3.5.6
      */
+    @Override
     public LambdaUpdateChainWrapper<T> setIncrBy(boolean condition, SFunction<T, ?> column, Number val) {
         wrapperChildren.setIncrBy(condition, column, val);
         return typedThis;
@@ -87,25 +81,13 @@ public class LambdaUpdateChainWrapper<T> extends AbstractChainWrapper<T, SFuncti
     /**
      * 字段自减变量 val 值
      *
-     * @param column 字段
-     * @param val    值
-     * @return this
-     * @since 3.5.6
-     */
-    public LambdaUpdateChainWrapper<T> setDecrBy(SFunction<T, ?> column, Number val) {
-        wrapperChildren.setDecrBy(column, val);
-        return typedThis;
-    }
-
-    /**
-     * 字段自减变量 val 值
-     *
      * @param condition 条件
      * @param column    字段
      * @param val       值
      * @return this
      * @since 3.5.6
      */
+    @Override
     public LambdaUpdateChainWrapper<T> setDecrBy(boolean condition, SFunction<T, ?> column, Number val) {
         wrapperChildren.setDecrBy(condition, column, val);
         return typedThis;

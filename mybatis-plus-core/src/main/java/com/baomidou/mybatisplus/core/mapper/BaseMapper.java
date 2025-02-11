@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2024, baomidou (jobob@qq.com).
+ * Copyright (c) 2011-2025, baomidou (jobob@qq.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -213,7 +213,7 @@ public interface BaseMapper<T> extends Mapper<T> {
         TableInfo tableInfo = TableInfoHelper.getTableInfo(entityClass);
         Map<String, Object> params = new HashMap<>();
         if (useFill && tableInfo.isWithLogicDelete() && tableInfo.isWithUpdateFill()) {
-            params.put(Constants.ENTITY, tableInfo.newInstance());
+            params.put(Constants.MP_FILL_ET, tableInfo.newInstance());
         }
         params.put(Constants.COLL, collections);
         return sqlSession.delete(mapperInterface.getName() + StringPool.DOT + SqlMethod.DELETE_BY_IDS.getMethod(), params);
