@@ -26,3 +26,6 @@ html
 gradle/
 gradlew
 gradlew.bat
+
+# kotlin
+.kotlin
