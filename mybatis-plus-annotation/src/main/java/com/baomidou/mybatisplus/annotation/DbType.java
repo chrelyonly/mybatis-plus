@@ -91,7 +91,7 @@ public enum DbType {
     /**
      * Gauss
      */
-    GAUSS("zenith", "Gauss 数据库"),
+    GAUSS("gauss", "Gauss 数据库"),
     /**
      * ClickHouse
      */
