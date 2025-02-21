@@ -16,18 +16,14 @@
 package com.baomidou.mybatisplus.extension.parser;
 
 import com.baomidou.mybatisplus.extension.parser.cache.JsqlParseCache;
+import com.baomidou.mybatisplus.jsqlparser.JsqlParserThreadPool;
 import lombok.Setter;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.statement.Statement;
 import net.sf.jsqlparser.statement.Statements;
-import org.apache.ibatis.logging.Log;
-import org.apache.ibatis.logging.LogFactory;
 
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author miemie
@@ -35,13 +31,14 @@ import java.util.concurrent.TimeUnit;
  */
 public class JsqlParserGlobal {
 
-    private static final Log LOG = LogFactory.getLog(JsqlParserGlobal.class);
 
     /**
      * 默认线程数大小
      *
      * @since 3.5.6
+     * @deprecated {@link JsqlParserThreadPool#DEFAULT_THREAD_SIZE}
      */
+    @Deprecated
     public static final int DEFAULT_THREAD_SIZE = (Runtime.getRuntime().availableProcessors() + 1) / 2;
 
     /**
@@ -50,33 +47,53 @@ public class JsqlParserGlobal {
      *
      * @see java.util.concurrent.ThreadPoolExecutor
      * @since 3.5.6
+     * @deprecated 3.5.10.2 后面不再公开此属性,请使用{@link #setExecutorService(ExecutorService)}} 或 {@link #setExecutorService(ExecutorService, boolean)}
      */
-    public static ExecutorService executorService = new ThreadPoolExecutor(DEFAULT_THREAD_SIZE, DEFAULT_THREAD_SIZE, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(), r -> {
-        Thread thread = new Thread(r);
-        thread.setName("mybatis-plus-jsqlParser-" + thread.getId());
-        thread.setDaemon(true);
-        return thread;
-    });
-
-    static {
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            if (!executorService.isShutdown()) {
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("close jsqlParser thread pool ...");
-                }
-                executorService.shutdown();
-            }
-        }, "mybatis-plus-jsqlParser-shutdown-hook"));
-    }
+    @Deprecated
+    public static ExecutorService executorService;
 
     @Setter
-    private static JsqlParserFunction<String, Statement> parserSingleFunc = sql -> CCJSqlParserUtil.parse(sql, executorService, null);
+    private static JsqlParserFunction<String, Statement> parserSingleFunc = sql -> CCJSqlParserUtil.parse(sql, getExecutorService(), null);
 
     @Setter
-    private static JsqlParserFunction<String, Statements> parserMultiFunc = sql -> CCJSqlParserUtil.parseStatements(sql, executorService, null);
+    private static JsqlParserFunction<String, Statements> parserMultiFunc = sql -> CCJSqlParserUtil.parseStatements(sql, getExecutorService(), null);
 
     @Setter
     private static JsqlParseCache jsqlParseCache;
+
+    /**
+     * 设置解析线程池
+     *
+     * @param executorService 线程池 (自行控制线程池关闭)
+     * @since 3.5.10.2
+     */
+    public static void setExecutorService(ExecutorService executorService) {
+        JsqlParserGlobal.executorService = executorService;
+    }
+
+    /**
+     * 设置解析线程池
+     *
+     * @param executorService 线程池 (自行控制线程池关闭)
+     * @param addShutdownHook 是否注册退出关闭钩子
+     * @since 3.5.10.2
+     */
+    public static void setExecutorService(ExecutorService executorService, boolean addShutdownHook) {
+        JsqlParserGlobal.executorService = executorService;
+        if (addShutdownHook) {
+            JsqlParserThreadPool.addShutdownHook(executorService);
+        }
+    }
+
+    /**
+     * 获取解析线程池(如果未自定义则返回默认的解析线程池)
+     *
+     * @return 解析线程池
+     * @since 3.5.10.2
+     */
+    public static ExecutorService getExecutorService() {
+        return JsqlParserGlobal.executorService == null ? JsqlParserThreadPool.getDefaultThreadPoolExecutor() : JsqlParserGlobal.executorService;
+    }
 
     public static Statement parse(String sql) throws JSQLParserException {
         if (jsqlParseCache == null) {
