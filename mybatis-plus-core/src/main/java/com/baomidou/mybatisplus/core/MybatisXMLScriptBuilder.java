@@ -45,6 +45,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -130,6 +131,8 @@ public class MybatisXMLScriptBuilder extends BaseBuilder {
 
     private static final Pattern PATTERN = Pattern.compile("^\\s+|\\s+$");
 
+    private static final Map<String, StaticTextSqlNode> CACHE_EMPTY_SQL_NODE = new ConcurrentHashMap<>();
+
     /**
      * 将前后空白符替换成空格
      *
@@ -149,12 +152,11 @@ public class MybatisXMLScriptBuilder extends BaseBuilder {
             XNode child = node.newXNode(children.item(i));
             if (child.getNode().getNodeType() == Node.CDATA_SECTION_NODE || child.getNode().getNodeType() == Node.TEXT_NODE) {
                 String text = cacheStr(child.getStringBody(""));
-                String trimText = text.trim();
-                if (trimText.isEmpty()) {
-                    contents.add(SPACE_SQL_NODE);
+                if (text.trim().isEmpty()) {
+                    StaticTextSqlNode staticTextSqlNode = CACHE_EMPTY_SQL_NODE.computeIfAbsent(text, StaticTextSqlNode::new);
+                    contents.add(staticTextSqlNode);
                     continue;
                 }
-                text = replaceLeadingAndTrailingWhitespace(text);
                 TextSqlNode textSqlNode = new TextSqlNode(text);
                 if (textSqlNode.isDynamic()) {
                     contents.add(textSqlNode);

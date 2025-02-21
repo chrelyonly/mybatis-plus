@@ -442,7 +442,7 @@ public abstract class AbstractMethod implements Constants {
      * @since 3.5.3.2
      */
     public SqlSource createSqlSource(Configuration configuration, String script, Class<?> parameterType) {
-        return languageDriver.createSqlSource(configuration, script, parameterType);
+        return languageDriver.createSqlSource(configuration, SqlSourceBuilder.removeExtraWhitespaces(script), parameterType);
     }
 
 }
