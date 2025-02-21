@@ -46,12 +46,12 @@ import java.util.Objects;
 public class DdlHelper {
 
     /**
-     * 允许 SQL 脚本文件
+     * 运行 SQL 脚本文件
      *
      * @param ddlGenerator DDL 生成器
      * @param connection   数据库连接
      * @param sqlFiles     SQL 文件列表
-     * @param autoCommit   自动提交事务
+     * @param autoCommit   是否自动提交事务
      * @throws SQLException SQLException
      */
     public static void runScript(IDdlGenerator ddlGenerator, Connection connection, List<String> sqlFiles, boolean autoCommit) throws SQLException {
@@ -106,12 +106,12 @@ public class DdlHelper {
     }
 
     /**
-     * 允许 SQL 脚本文件
+     * 运行 SQL 脚本文件
      *
      * @param ddlGenerator DDL 生成器
      * @param dataSource   数据源
      * @param sqlFiles     SQL 文件列表
-     * @param autoCommit   自动提交事务
+     * @param autoCommit   是否自动提交事务
      */
     public static void runScript(IDdlGenerator ddlGenerator, DataSource dataSource, List<String> sqlFiles, boolean autoCommit) {
         try (Connection connection = dataSource.getConnection()) {
@@ -149,8 +149,7 @@ public class DdlHelper {
         // oracle same type
         else if (dbType.oracleSameType()) {
             return OracleDdlGenerator.newInstance();
-        }
-        else if (DbType.SQLITE == dbType){
+        } else if (DbType.SQLITE == dbType) {
             return SQLiteDdlGenerator.newInstance();
         }
         // postgresql same type
