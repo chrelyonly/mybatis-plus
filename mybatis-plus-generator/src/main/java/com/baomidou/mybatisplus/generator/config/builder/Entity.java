@@ -295,14 +295,14 @@ public class Entity implements ITemplate {
     /**
      * 导包处理方法
      *
-     * @since 3.5.10.2
+     * @since 3.5.11
      */
     private Function<Set<String>, List<String>> importPackageFunction;
 
     /**
      * 处理类注解方法 (含类与字段)
      *
-     * @since 3.5.10.2
+     * @since 3.5.11
      */
     private Function<List<? extends AnnotationAttributes>, List<AnnotationAttributes>> annotationAttributesFunction;
 
@@ -884,7 +884,7 @@ public class Entity implements ITemplate {
          *
          * @param importPackageFunction 导包处理
          * @return this
-         * @since 3.5.10.2
+         * @since 3.5.11
          */
         public Builder importPackageFunction(Function<Set<String>, List<String>> importPackageFunction) {
             this.entity.importPackageFunction = importPackageFunction;
@@ -896,7 +896,7 @@ public class Entity implements ITemplate {
          *
          * @param annotationAttributesFunction 注解处理
          * @return this
-         * @since 3.5.10.2
+         * @since 3.5.11
          */
         public Builder annotationAttributesFunction(Function<List<? extends AnnotationAttributes>, List<AnnotationAttributes>> annotationAttributesFunction) {
             this.entity.annotationAttributesFunction = annotationAttributesFunction;

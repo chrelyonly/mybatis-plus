@@ -143,7 +143,7 @@ public class TableField {
     /**
      * 字段注解处理
      *
-     * @since 3.5.10.2
+     * @since 3.5.11
      */
     private Function<List<? extends AnnotationAttributes>, List<AnnotationAttributes>> annotationAttributesFunction;
 
@@ -393,7 +393,7 @@ public class TableField {
 
     /**
      * @param annotationAttributesList 注解属性集合
-     * @since 3.5.10.2
+     * @since 3.5.11
      */
     public void addAnnotationAttributesList(@NotNull List<AnnotationAttributes> annotationAttributesList, Function<List<? extends AnnotationAttributes>, List<AnnotationAttributes>> annotationAttributesFunction) {
         this.annotationAttributesList.addAll(annotationAttributesList);

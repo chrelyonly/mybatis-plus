@@ -47,7 +47,7 @@ public class JsqlParserGlobal {
      *
      * @see java.util.concurrent.ThreadPoolExecutor
      * @since 3.5.6
-     * @deprecated 3.5.10.2 后面不再公开此属性,请使用{@link #setExecutorService(ExecutorService)}} 或 {@link #setExecutorService(ExecutorService, boolean)}
+     * @deprecated 3.5.11 后面不再公开此属性,请使用{@link #setExecutorService(ExecutorService)}} 或 {@link #setExecutorService(ExecutorService, boolean)}
      */
     @Deprecated
     public static ExecutorService executorService;
@@ -65,7 +65,7 @@ public class JsqlParserGlobal {
      * 设置解析线程池
      *
      * @param executorService 线程池 (自行控制线程池关闭)
-     * @since 3.5.10.2
+     * @since 3.5.11
      */
     public static void setExecutorService(ExecutorService executorService) {
         JsqlParserGlobal.executorService = executorService;
@@ -76,7 +76,7 @@ public class JsqlParserGlobal {
      *
      * @param executorService 线程池 (自行控制线程池关闭)
      * @param addShutdownHook 是否注册退出关闭钩子
-     * @since 3.5.10.2
+     * @since 3.5.11
      */
     public static void setExecutorService(ExecutorService executorService, boolean addShutdownHook) {
         JsqlParserGlobal.executorService = executorService;
@@ -89,7 +89,7 @@ public class JsqlParserGlobal {
      * 获取解析线程池(如果未自定义则返回默认的解析线程池)
      *
      * @return 解析线程池
-     * @since 3.5.10.2
+     * @since 3.5.11
      */
     public static ExecutorService getExecutorService() {
         return JsqlParserGlobal.executorService == null ? JsqlParserThreadPool.getDefaultThreadPoolExecutor() : JsqlParserGlobal.executorService;

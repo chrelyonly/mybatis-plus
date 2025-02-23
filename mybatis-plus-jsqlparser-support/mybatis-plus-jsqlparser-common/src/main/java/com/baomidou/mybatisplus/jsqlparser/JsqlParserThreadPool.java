@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
  * <p>当没指定解析线程池时,默认使用一个固定长度的线程作为解析线程池.</p>
  *
  * @author nieqiurong
- * @since 3.5.10.2
+ * @since 3.5.11
  */
 public class JsqlParserThreadPool {
 
