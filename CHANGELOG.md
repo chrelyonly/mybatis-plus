@@ -1,4 +1,72 @@
 ﻿# CHANGELOG
+## [v3.5.10.1] 2025.01.13
+- fix: 修复动态节点处理错误
+
+## [v3.5.10] 2025.01.12
+- fix: 修复字段有`TableField`注解但未指定`value`值下全局`columnFormat`未生效问题
+- fix: 修复enjoy模板生成kotlin代码报错
+- fix: 修复enjoy模板生成字符串代码报错
+- fix: 修复springdoc生成注解未转义双引号
+- fix: 修复数据变动插件更新无主键报错
+- fix: 修复多表解析processJoins解析表出现越界
+- feat: TableName注解新增`properties`属性
+- feat: 支持@InterceptorIgnore注解在default方法上
+- feat: 适配jsqlparser5.1版本(5.0兼容版本请使用`mybatis-plus-jsqlparser-5.0`)
+- feat: 提供`InterceptorIgnoreHelper.execute`模板执行方法处理插件跳过策略(防止手动使用handle方法出现未清理线程资源造成的错误)
+- feat: 代码生成器全局package配置属性支持自定义模板信息获取
+- feat: 代码生成器新增表索引信息获取
+- feat: 代码生成器提供`Mapper.Builder.generateMapperMethodHandler`处理器基于索引生成索引方法
+- feat: 代码生成器Entity支持自定义Class注解和字段注解生成
+- feat: 代码生成器Entity支持lombok模式指定生成类注解
+- feat: 代码生成器Entity支持ToString`(Entity.Builder.toString(boolean))`方法控制生成 (默认生成,lombok模式下将会生成@ToString,低版本下lombok不生成,属于不兼容改动)
+- feat: 代码生成器Entity支持字段文档注释(`Entity.Builder.fieldUseJavaDoc(boolean)`)控制生成 (默认生成,低版本下,使用swagger或springdoc不会生成字段文档注释,属于不兼容改动)
+- feat: 重写动态语句生成(生成执行SQL将不再包含\n换行符)
+- feat: 安全加密处理器密钥获取支持环境变量与系统属性传入
+- feat: 升级mybatis至3.5.19
+- feat: 升级springboot至3.4.1
+- feat: 升级kotlin至2.1.0
+- 实用性低,检查语法不完善,计划移除IllegalSQLInnerInterceptor插件
+- 功能缺陷较多,计划移除DataChangeRecorderInnerInterceptor插件
+
+## [v3.5.9] 2024.10.23
+- opt: 优化代码生成器支持可视化配置生成能力
+- opt: 解耦扩展包不再强制依赖 spring 开发框架
+- opt: 拆分jsqlparser支持模块,提供mybatis-plus-jsqlparser(支持最新jsqlparser)与mybatis-plus-jsqlparser-4.9模块, 默认不携带,升级后需要自行引入.
+- feat: 重构 service 模块抽象为 CrudRepository 不再建议使用 IService 避免业务层数据混乱
+- feat: 新增 solon 启动插件支持
+- feat: 升级SpringBoot3.3.4
+- feat: 升级velocity2.4
+
+## [v3.5.8] 2024.09.18
+- fix: 解决optimizeJoinOfCountSql反序列化不支持问题
+- fix: 解决Db工具类批量操作使用rewriteBatchedStatements=true返回值不准确
+- fix: 修复逻辑删除填充与乐观锁冲突
+- fix: 修复IllegalSQLInnerInterceptor分析嵌套count语句错误
+- fix: 升级jsqlParser5.0 解决 for update 语句错误
+- fix: 修复处自增自减负数情况导致jsqlParser解析优化错误
+- fix: 修复removeMapper缓存清理不完全
+- fix: 修复SqlServerQuery查询表注释乱码
+- opt: 完善函数注入校验逻辑
+- opt: Page属性访问调整为private,重写toString方法
+- opt: 主键生成策略(uuid)不支持的类型打印警告日志
+- opt: MybatisPlusException转化为PersistenceException子类
+- feat: 增加deleteByIds空集合处理
+- feat: 重命名selectBatchIds方法为selectByIds
+- feat: 支持tableName与schema属性占位符配
+- feat: 代码生成器增加对虚拟列的属性获取
+- feat: chain wrapper to lambda chain wrapper #6314
+- feat: 代码生成器增加手动指定数据库驱动兼容不能自动注册的驱动实现
+- feat: 升级kotlin2.0.0
+- feat: 升级SpringBoot3.3.2
+- feat: 升级fastjson2.0.52
+- feat: 升级mybatis-spring3.0.4
+- feat: 升级spring-cloud-commons4.1.4
+- feat: 部分支持依赖升级更新
+- feat: 支持GoldenDB数据库
+- feat: 支持Duckdb数据库
+- feat: 支持Derby数据库
+- feat: 支持Vastbase数据库
+
 ## [v3.5.7] 2024.06.10
 - fix: 修复动态表名处理 update ignore 错误
 - fix: 修复SQLServer2005分页处理空格错误

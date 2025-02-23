@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2024, baomidou (jobob@qq.com).
+ * Copyright (c) 2011-2025, baomidou (jobob@qq.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@ package com.baomidou.mybatisplus.generator.config.builder;
 import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.query.IDatabaseQuery;
+import lombok.Getter;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -88,6 +90,14 @@ public class ConfigBuilder {
     private final IDatabaseQuery databaseQuery;
 
     /**
+     * 资源加载器
+     * @since 3.5.9
+     */
+    @Getter
+    @Setter
+    private TemplateLoadWay templateLoadWay = TemplateLoadWay.FILE;
+
+    /**
      * 在构造器中处理配置
      *
      * @param packageConfig    包配置
@@ -105,7 +115,7 @@ public class ConfigBuilder {
         this.templateConfig = Optional.ofNullable(templateConfig).orElseGet(GeneratorBuilder::templateConfig);
         this.packageConfig = Optional.ofNullable(packageConfig).orElseGet(GeneratorBuilder::packageConfig);
         this.injectionConfig = Optional.ofNullable(injectionConfig).orElseGet(GeneratorBuilder::injectionConfig);
-        this.pathInfo.putAll(new PathInfoHandler(this.globalConfig, this.strategyConfig, this.packageConfig).getPathInfo());
+        this.pathInfo.putAll(new PathInfoHandler(this.injectionConfig, this.globalConfig, this.strategyConfig, this.packageConfig).getPathInfo());
         Class<? extends IDatabaseQuery> databaseQueryClass = dataSourceConfig.getDatabaseQueryClass();
         try {
             Constructor<? extends IDatabaseQuery> declaredConstructor = databaseQueryClass.getDeclaredConstructor(this.getClass());

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2024, baomidou (jobob@qq.com).
+ * Copyright (c) 2011-2025, baomidou (jobob@qq.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +17,13 @@ package com.baomidou.mybatisplus.extension.ddl;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
-import com.baomidou.mybatisplus.extension.ddl.history.IDdlGenerator;
-import com.baomidou.mybatisplus.extension.ddl.history.MysqlDdlGenerator;
-import com.baomidou.mybatisplus.extension.ddl.history.OracleDdlGenerator;
-import com.baomidou.mybatisplus.extension.ddl.history.PostgreDdlGenerator;
-import com.baomidou.mybatisplus.extension.ddl.history.SQLiteDdlGenerator;
+import com.baomidou.mybatisplus.extension.spi.CompatibleHelper;
+import com.baomidou.mybatisplus.extension.ddl.history.*;
 import com.baomidou.mybatisplus.extension.toolkit.JdbcUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.ibatis.jdbc.SqlRunner;
-import org.springframework.core.io.ClassPathResource;
 
 import javax.sql.DataSource;
 import java.io.*;
@@ -50,12 +46,12 @@ import java.util.Objects;
 public class DdlHelper {
 
     /**
-     * 允许 SQL 脚本文件
+     * 运行 SQL 脚本文件
      *
      * @param ddlGenerator DDL 生成器
      * @param connection   数据库连接
      * @param sqlFiles     SQL 文件列表
-     * @param autoCommit   自动提交事务
+     * @param autoCommit   是否自动提交事务
      * @throws SQLException SQLException
      */
     public static void runScript(IDdlGenerator ddlGenerator, Connection connection, List<String> sqlFiles, boolean autoCommit) throws SQLException {
@@ -110,12 +106,12 @@ public class DdlHelper {
     }
 
     /**
-     * 允许 SQL 脚本文件
+     * 运行 SQL 脚本文件
      *
      * @param ddlGenerator DDL 生成器
      * @param dataSource   数据源
      * @param sqlFiles     SQL 文件列表
-     * @param autoCommit   自动提交事务
+     * @param autoCommit   是否自动提交事务
      */
     public static void runScript(IDdlGenerator ddlGenerator, DataSource dataSource, List<String> sqlFiles, boolean autoCommit) {
         try (Connection connection = dataSource.getConnection()) {
@@ -126,7 +122,7 @@ public class DdlHelper {
     }
 
     public static InputStream getInputStream(String path) throws Exception {
-        return new ClassPathResource(path).getInputStream();
+        return CompatibleHelper.getCompatibleSet().getInputStream(path);
     }
 
     protected static String getNowTime() {
@@ -153,8 +149,7 @@ public class DdlHelper {
         // oracle same type
         else if (dbType.oracleSameType()) {
             return OracleDdlGenerator.newInstance();
-        }
-        else if (DbType.SQLITE == dbType){
+        } else if (DbType.SQLITE == dbType) {
             return SQLiteDdlGenerator.newInstance();
         }
         // postgresql same type

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2024, baomidou (jobob@qq.com).
+ * Copyright (c) 2011-2025, baomidou (jobob@qq.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -91,7 +91,7 @@ public enum DbType {
     /**
      * Gauss
      */
-    GAUSS("zenith", "Gauss 数据库"),
+    GAUSS("gauss", "Gauss 数据库"),
     /**
      * ClickHouse
      */
@@ -207,6 +207,26 @@ public enum DbType {
      */
     PRESTO("presto", "Presto数据库"),
     /**
+     * derby
+     */
+    DERBY("derby", "Derby数据库"),
+    /**
+     * vastbase
+     */
+    VASTBASE("vastbase", "Vastbase数据库"),
+    /**
+     * goldendb
+     */
+    GOLDENDB("goldendb", "GoldenDB数据库"),
+    /**
+     * duckdb
+     */
+    DUCKDB("duckdb", "duckdb数据库"),
+    /**
+     * yasdb
+     */
+    YASDB("yasdb", "崖山数据库"),
+    /**
      * UNKNOWN DB
      */
     OTHER("other", "其他数据库");
@@ -243,7 +263,9 @@ public enum DbType {
             || this == DbType.CLICK_HOUSE
             || this == DbType.OCEAN_BASE
             || this == DbType.CUBRID
-            || this == DbType.SUNDB;
+            || this == DbType.SUNDB
+            || this == DbType.GOLDENDB
+            || this == DbType.YASDB;
     }
 
     public boolean oracleSameType() {
@@ -269,6 +291,8 @@ public enum DbType {
             || this == DbType.TDENGINE
             || this == DbType.UXDB
             || this == DbType.GBASE8S_PG
-            || this == DbType.GBASE_8C;
+            || this == DbType.GBASE_8C
+            || this == DbType.VASTBASE
+            || this == DbType.DUCKDB;
     }
 }
