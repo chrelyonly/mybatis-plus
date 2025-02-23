@@ -263,6 +263,9 @@ public class TableInfo {
         }
         if (entity.isSerialVersionUID() || entity.isActiveRecord()) {
             this.importPackages.add(Serializable.class.getCanonicalName());
+            if (entity.isSerialAnnotation()) {
+                this.importPackages.add("java.io.Serial");
+            }
         }
         if (this.isConvert()) {
             this.importPackages.add(TableName.class.getCanonicalName());

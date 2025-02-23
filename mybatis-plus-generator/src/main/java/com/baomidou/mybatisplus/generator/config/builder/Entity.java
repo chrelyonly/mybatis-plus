@@ -115,6 +115,14 @@ public class Entity implements ITemplate {
     private boolean serialVersionUID = true;
 
     /**
+     * 是否启用 {@link java.io.Serial} (需JAVA 14) 注解
+     *
+     * @since 3.5.11
+     */
+    @Getter
+    private boolean serialAnnotation;
+
+    /**
      * 【实体】是否生成字段常量（默认 false）<br>
      * -----------------------------------<br>
      * public static final String ID = "test_id";
@@ -412,6 +420,7 @@ public class Entity implements ITemplate {
         data.put("versionFieldName", this.versionColumnName);
         data.put("activeRecord", this.activeRecord);
         data.put("entitySerialVersionUID", this.serialVersionUID);
+        data.put("entitySerialAnnotation", this.serialAnnotation);
         data.put("entityColumnConstant", this.columnConstant);
         data.put("entityBuilderModel", this.chain);
         data.put("chainModel", this.chain);
@@ -497,6 +506,18 @@ public class Entity implements ITemplate {
          */
         public Builder disableSerialVersionUID() {
             this.entity.serialVersionUID = false;
+            return this;
+        }
+
+        /**
+         * 启用生成 {@link java.io.Serial} (需JAVA 14)
+         * <p>当开启了 {@link #serialVersionUID} 时,会增加 {@link java.io.Serial} 注解在此字段上</p>
+         *
+         * @return this
+         * @since 3.5.11
+         */
+        public Builder enableSerialAnnotation() {
+            this.entity.serialAnnotation = true;
             return this;
         }
 

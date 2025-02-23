@@ -26,6 +26,9 @@ public class ${entity} {
 <% } %>
 <% if(entitySerialVersionUID){ %>
 
+    <% if(entitySerialAnnotation) { %>
+    @Serial
+    <% } %>
     private static final long serialVersionUID = 1L;
 <% } %>
 <% var keyPropertyName; %>

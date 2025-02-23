@@ -26,6 +26,9 @@ public class #(entity) {
 #end
 #if(entitySerialVersionUID)
 
+    #if(entitySerialAnnotation)
+    @Serial
+    #end
     private static final long serialVersionUID = 1L;
 #end
 ### ----------  BEGIN 字段循环遍历  ----------

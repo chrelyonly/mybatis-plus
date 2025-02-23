@@ -25,6 +25,9 @@ public class ${entity} {
 </#if>
 <#if entitySerialVersionUID>
 
+    <#if entitySerialAnnotation>
+    @Serial
+    </#if>
     private static final long serialVersionUID = 1L;
 </#if>
 <#-- ----------  BEGIN 字段循环遍历  ---------->
